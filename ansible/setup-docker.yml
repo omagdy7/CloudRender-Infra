@@ -1,0 +1,27 @@
+- name: Install Docker on EC2 instances
+  hosts: ec2_instances
+  become: yes
+
+  tasks:
+    - name: Update yum package manager
+      yum:
+        name: '*'
+        state: latest
+
+    - name: Install Docker
+      yum:
+        name: docker
+        state: present
+
+    - name: Start and enable Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add ec2-user to the docker group
+      user:
+        name: ec2-user
+        groups: docker
+        append: yes
+
